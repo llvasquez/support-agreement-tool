@@ -8,7 +8,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ steps }) => {
-  const currentStep = useSelector((state: RootState) => state.agreement.currentStep);
+  const currentStep = useSelector((state: RootState) => state.wizard.currentStep);
 
   return (
     <Box 

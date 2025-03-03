@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentStep } from '../../store/agreementSlice';
+import { setCurrentStep } from '../../store/slices/wizardSlice';
 import { RootState } from '../../store/store';
 
 interface WizardNavigationProps {
@@ -22,8 +22,7 @@ const WizardNavigation: React.FC<WizardNavigationProps> = ({
   nextLabel = 'Continue'
 }) => {
   const dispatch = useDispatch();
-  const currentStep = useSelector((state: RootState) => state.agreement.currentStep);
-
+  const currentStep = useSelector((state: RootState) => state.wizard.currentStep);
   const handleNext = () => {
     if (onNext) {
       onNext();

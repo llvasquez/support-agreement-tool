@@ -1,18 +1,18 @@
-  enum AgreementType {
+  export enum AgreementType {
     MOA = 'MOA',
     MOU = 'MOU',
     OTHER = 'OTHER',
     UNKNOWN = 'UNKNOWN'
   }
   
-  enum ClassificationLevel {
+  export enum ClassificationLevel {
     UNCLASSIFIED = 'UNCLASSIFIED',
-    CONFIDENTIAL = 'CONFIDENTIAL',
+    CONFIDENTIAL = 'CUI',
     SECRET = 'SECRET',
     TOP_SECRET = 'TOP_SECRET'
   }
   
-  interface Agreement {
+  export interface Agreement {
     id: string;
     title: string;
     type: AgreementType;
@@ -26,7 +26,7 @@
     sections: Section[];
   }
   
-  interface Section {
+  export interface Section {
     id: string;
     agreementId: string;
     versionId: string;
@@ -39,7 +39,7 @@
     lastModifiedDate: string;
   }
   
-  interface WizardState {
+  export interface WizardState {
     currentStep: number;
     agreementType: AgreementType;
     determiningFactors: {
@@ -51,3 +51,18 @@
     };
     currentAgreement: Agreement | null;
   }
+
+  export interface Template {
+    type: AgreementType;
+    title: string;
+    description: string;
+    version: string;
+    lastUpdated: Date;
+    sections: {
+      id: string;
+      name: string;
+      content: string;
+      isMandatory: boolean;
+      classificationMarking: string;
+    }[];
+}

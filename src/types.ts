@@ -7,7 +7,7 @@ export enum AgreementType {
   
   export enum ClassificationLevel {
     UNCLASSIFIED = 'UNCLASSIFIED',
-    CONFIDENTIAL = 'CONFIDENTIAL',
+    CONFIDENTIAL = 'CUI',
     SECRET = 'SECRET',
     TOP_SECRET = 'TOP_SECRET'
   }

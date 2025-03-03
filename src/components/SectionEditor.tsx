@@ -1,45 +1,42 @@
 // src/components/SectionEditor.tsx
 import React, { useState } from 'react';
-import { 
-  Box, 
-  TextField, 
-  Typography, 
-  Paper, 
-  Button, 
-  Select, 
-  MenuItem, 
-  FormControl,
-  InputLabel,
-  Grid,
-  Chip,
-  SelectChangeEvent
-} from '@mui/material';
-import { Section } from '../types/agreements';
 import { useDispatch } from 'react-redux';
+import { Section } from '../types/types';
 import { updateSection } from '../store/slices/agreementSlice';
+import { 
+    Box, 
+    Typography, 
+    Grid, 
+    Chip, 
+    TextField,
+    IconButton,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel
+  } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { SelectChangeEvent } from '@mui/material';
 
 interface SectionEditorProps {
   section: Section;
-  readOnly?: boolean;
+  readOnly: boolean;
 }
 
-const portionMarkings = ['U', 'C', 'S', 'TS'];
-
-export const SectionEditor: React.FC<SectionEditorProps> = ({ 
-  section,
-  readOnly = false,
-}) => {
+const SectionEditor: React.FC<SectionEditorProps> = ({ section, readOnly }) => {
   const dispatch = useDispatch();
   const [content, setContent] = useState(section.content);
-  const [portionMarking, setPortionMarking] = useState(section.portionMarking);
+  const [classificationMarking, setClassificationMarking] = useState(section.classificationMarking);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
   };
 
-  const handlePortionMarkingChange = (event: SelectChangeEvent<string>) => {
-    setPortionMarking(event.target.value);
+  const handleClassificationChange = (event: SelectChangeEvent) => {
+    setClassificationMarking(event.target.value as string)
   };
 
   const handleSave = () => {
@@ -48,118 +45,80 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
       content,
       classificationMarking,
     }));
-    
+
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     setContent(section.content);
-    setPortionMarking(section.portionMarking);
+    setClassificationMarking(section.classificationMarking);
     setIsEditing(false);
   };
 
-  const getPortionMarkingColor = (marking: string) => {
-    switch (marking) {
-      case 'U': return 'success';
-      case 'C': return 'info';
-      case 'S': return 'warning';
-      case 'TS': return 'error';
-      default: return 'default';
-    }
-  };
-
   return (
-    <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+    <Box sx={{ mb: 3 }}>
       <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
         <Grid item>
-          <Typography variant="h6">{section.title}</Typography>
+          <Typography variant="h6">{section.name}</Typography>
         </Grid>
         <Grid item>
           <Chip 
-            label={portionMarking} 
-            color={getPortionMarkingColor(portionMarking) as any}
-            size="small"
+            label={`Marking: ${section.classificationMarking}`} 
+            color="default" 
+            size="small" 
+            sx={{ mr: 1 }}
           />
         </Grid>
-        <Grid item>
-          {section.isMandatory && (
-            <Chip label="Mandatory" size="small" color="primary" />
+        {!readOnly && <Grid item>
+          {!isEditing ? (
+            <IconButton onClick={() => setIsEditing(true)}>
+              <EditIcon />
+            </IconButton>
+          ) : (
+            <>
+              <IconButton onClick={handleSave}>
+                <CheckIcon />
+              </IconButton>
+              <IconButton onClick={handleCancel}>
+                <CancelIcon />
+              </IconButton>
+            </>
           )}
-        </Grid>
-        <Grid item sx={{ flexGrow: 1 }} />
-        {!readOnly && !isEditing && (
-          <Grid item>
-            <Button 
-              variant="outlined" 
-              color="primary" 
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </Button>
-          </Grid>
-        )}
+        </Grid>}
       </Grid>
 
       {isEditing ? (
         <Box>
-          <FormControl fullWidth size="small" sx={{ mb: 2 }}>
-            <InputLabel id="portion-marking-label">Portion Marking</InputLabel>
-            <Select
-              labelId="portion-marking-label"
-              value={portionMarking}
-              label="Portion Marking"
-              onChange={handlePortionMarkingChange}
-            >
-              {portionMarkings.map((marking) => (
-                <MenuItem key={marking} value={marking}>
-                  {marking}
-                </MenuItem>
-              ))}
-            </Select>
+        <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+          <InputLabel id="new-portion-marking-label">Classification Marking</InputLabel>
+          <Select
+            labelId="new-portion-marking-label"
+            value={classificationMarking}
+            label="Classification Marking"
+            onChange={handleClassificationChange}
+          >
+            {['U', 'C', 'S', 'TS'].map((marking) => (
+              <MenuItem key={marking} value={marking}>
+                {marking}
+              </MenuItem>
+            ))}
+          </Select>
           </FormControl>
           <TextField
-            fullWidth
             multiline
-            rows={6}
-            variant="outlined"
+            fullWidth
             value={content}
             onChange={handleContentChange}
-            sx={{ mb: 2 }}
+            rows={8}
+            variant="outlined"
           />
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button 
-              variant="outlined" 
-              color="secondary" 
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              onClick={handleSave}
-            >
-              Save
-            </Button>
-          </Box>
         </Box>
       ) : (
-        <Typography 
-          component="pre" 
-          sx={{ 
-            whiteSpace: 'pre-wrap',
-            fontFamily: 'inherit',
-            backgroundColor: 'background.paper',
-            p: 2,
-            borderRadius: 1,
-            border: '1px solid',
-            borderColor: 'divider'
-          }}
-        >
+        <Typography sx={{ whiteSpace: 'pre-line' }}>
           {content}
         </Typography>
       )}
-    </Paper>
+    </Box>
   );
 };
 

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import agreementReducer from './agreementSlice';
+import agreementReducer from './slices/agreementSlice';
+import wizardReducer from './slices/wizardSlice'; // Import wizardReducer
 
 export const store = configureStore({
   reducer: {
     agreement: agreementReducer,
+    wizard: wizardReducer, // Add wizardReducer to the store
   },
 });
 

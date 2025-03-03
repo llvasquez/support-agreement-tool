@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Box, Typography, RadioGroup, FormControlLabel, Radio, Link, LinearProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDeterminingFactor, determineAgreementType } from '../../store/agreementSlice';
+import { setDeterminingFactor, determineAgreementType, setCurrentStep} from '../../store/slices/wizardSlice';
 import { RootState } from '../../store/store';
 import InfoBox from './InfoBox';
 import WizardNavigation from './WizardNavigation';
 
 const AgreementTypeStep: React.FC = () => {
   const dispatch = useDispatch();
-  const { determiningFactors } = useSelector((state: RootState) => state.agreement);
+  // const { determiningFactors } = useSelector((state: RootState) => state.wizard); // Removed this line
   const [selectedOption, setSelectedOption] = useState<string>('');
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,14 +20,13 @@ const AgreementTypeStep: React.FC = () => {
     dispatch(setDeterminingFactor({ factor: 'involvesReimbursement', value: false }));
     dispatch(setDeterminingFactor({ factor: 'involvesFunding', value: false }));
     dispatch(setDeterminingFactor({ factor: 'documentingUnderstanding', value: false }));
+    dispatch(setDeterminingFactor({ factor: 'partiesAllDoD', value: true }));
     
     // Set appropriate factors based on selection
     if (value === 'resources') {
       dispatch(setDeterminingFactor({ factor: 'involvesResources', value: true }));
-      dispatch(setDeterminingFactor({ factor: 'partiesAllDoD', value: true }));
     } else if (value === 'understanding') {
       dispatch(setDeterminingFactor({ factor: 'documentingUnderstanding', value: true }));
-      dispatch(setDeterminingFactor({ factor: 'partiesAllDoD', value: true }));
     } else if (value === 'non-dod') {
       dispatch(setDeterminingFactor({ factor: 'partiesAllDoD', value: false }));
     }
@@ -35,6 +34,7 @@ const AgreementTypeStep: React.FC = () => {
 
   const handleNext = () => {
     dispatch(determineAgreementType());
+    dispatch(setCurrentStep(2)); // Set the next step to 2.
   };
 
   return (
@@ -86,14 +86,17 @@ const AgreementTypeStep: React.FC = () => {
         </Typography>
       </InfoBox>
       
-      <Link 
-        href="#" 
-        color="primary" 
-        underline="hover" 
+      <Link
+        href="https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/400019p.pdf"
+        color="primary"
+        underline="hover"
         sx={{ mt: 2, display: 'block', fontSize: '0.875rem' }}
+        target="_blank" // Added to open the link in a new tab
+        rel="noopener noreferrer" // Added for security best practices
       >
         Learn more about agreement types in DoDI 4000.19
       </Link>
+
       
       <Box sx={{ flexGrow: 1 }} />
       

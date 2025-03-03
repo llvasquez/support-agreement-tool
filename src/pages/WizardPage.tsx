@@ -1,30 +1,38 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import Layout from '../components/layout/Layout';
+import { createAgreement } from '../store/slices/agreementSlice';
 import AgreementTypeStep from '../components/wizard/AgreementTypeStep';
+import BasicInformationStep from '../components/wizard/BasicInformationStep';
+import { AgreementType, ClassificationLevel } from '../types/types';
 
 const WizardPage: React.FC = () => {
-  const currentStep = useSelector((state: RootState) => state.agreement.currentStep);
+  const dispatch = useDispatch();
+  const currentStep = useSelector((state: RootState) => state.wizard.currentStep);
+  const AgreementType = useSelector((state: RootState) => state.wizard.agreementType);
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <AgreementTypeStep />;
-      case 2:
-        return <div>Basic Information Step (To be implemented)</div>;
-      case 3:
-        return <div>Agreement Details Step (To be implemented)</div>;
-      case 4:
-        return <div>Classification Step (To be implemented)</div>;
-      case 5:
-        return <div>Review & Export Step (To be implemented)</div>;
-      default:
-        return <AgreementTypeStep />;
+  //This is a test agreement that will be loaded in.
+  useEffect(() => {
+    if (AgreementType !== AgreementType.UNKNOWN) {
+      dispatch(createAgreement({
+        type: AgreementType,
+        title: 'Test Agreement', 
+        classificationLevel: ClassificationLevel.UNCLASSIFIED,
+        author: 'Test Author'
+      }));
     }
-  };
+  }, [AgreementType, dispatch]);
 
-  return <Layout>{renderStep()}</Layout>;
+  return (
+    <div>
+      {currentStep === 1 && <AgreementTypeStep />}
+      {currentStep === 2 && <BasicInformationStep />}
+      {/* Add more steps as needed */}
+      {currentStep > 2 && <div>This step doesn't exist yet.</div>}
+    </div>
+  );
 };
 
 export default WizardPage;
+

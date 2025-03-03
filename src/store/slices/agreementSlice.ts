@@ -1,9 +1,9 @@
 // src/store/slices/agreementSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { Agreement, ClassificationLevel, Section } from '../../types/types'; // Corrected import path
-import { AgreementType } from '../../types/agreements';
+import { Agreement, ClassificationLevel, Section, AgreementType } from '../../types/types'; // Corrected import path
 import { getTemplateByType } from '../../data/agreementTemplates';
+
 
 interface AgreementState {
   currentAgreement: Agreement | null;
@@ -47,7 +47,11 @@ const agreementSlice = createSlice({
               name: section.name,
               order: index,
               lastModifiedBy: author,
-              lastModifiedDate: now,            };
+              lastModifiedDate: now, 
+              agreementId: uuidv4(),
+              versionId: '1.0.0',
+              classificationMarking: 'U'
+            };
           }),        
           classificationLevel,
           createdDate: now,
@@ -59,7 +63,18 @@ const agreementSlice = createSlice({
         };
       }
     },
+    // Add new reducers to update the state
+    updateAgreementTitle: (state, action: PayloadAction<string>) => {
+      if (state.currentAgreement) {
+        state.currentAgreement.title = action.payload;
+      }
+    },
 
+    updateClassification: (state, action: PayloadAction<ClassificationLevel>) => {
+      if (state.currentAgreement) {
+        state.currentAgreement.classificationLevel = action.payload;
+      }
+    },
     // Update a section in the current agreement
     updateSection: (state, action: PayloadAction<{
       sectionId: string;
@@ -148,14 +163,6 @@ const agreementSlice = createSlice({
       }
     },
 
-    // Update classification level
-    updateClassification: (state, action: PayloadAction<ClassificationLevel>) => {
-      if (!state.currentAgreement) return;
-
-      state.currentAgreement.classificationLevel = action.payload;
-      state.currentAgreement.lastModifiedDate = new Date().toISOString();
-    },
-
     // Clear current agreement
     clearCurrentAgreement: (state) => {
       state.currentAgreement = null;
@@ -172,6 +179,7 @@ export const {
   loadAgreement,
   updateClassification,
   clearCurrentAgreement,
+  updateAgreementTitle,
 } = agreementSlice.actions;
 
 export default agreementSlice.reducer;

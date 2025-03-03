@@ -1,4 +1,6 @@
 // src/components/DocumentEditor.tsx
+import { v4 as uuidv4 } from 'uuid';
+import { Section } from '../types/types';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
@@ -38,8 +40,7 @@ import {
 import SectionEditor from './SectionEditor';
 // Import ClassificationLevel from types/types instead of types/agreements
 import { ClassificationLevel } from '../types/types';
-// Import Section from agreements
-import { Section } from '../types/agreements';
+import { stringify } from 'querystring';
 
 const DocumentEditor: React.FC = () => {
   const dispatch = useDispatch();
@@ -70,13 +71,18 @@ const DocumentEditor: React.FC = () => {
 
   const handleAddSection = () => {
     const newSection: Section = {
-      id: Date.now().toString(), // Ensure a unique ID
-      title: newSectionTitle,
+      id: uuidv4(),
+      agreementId: currentAgreement.id,
+      versionId: currentAgreement.currentVersionId,
+      name: newSectionTitle,
+      order: currentAgreement.sections.length, // You might need to calculate the correct order
       content: newSectionContent,
-      portionMarking: newSectionPortionMarking,
-      isMandatory: false, // Default value, adjust if necessary
-    };
-
+      isMandatory: false, // Default value
+      classificationMarking: newSectionPortionMarking, // Default value
+      lastModifiedBy: currentAgreement.lastModifiedBy, // Default value
+      lastModifiedDate: new Date().toISOString(), // Default value
+  };
+  
     dispatch(addSection({
       name: newSection.name, // Correct property
       content: newSection.content,

@@ -16,7 +16,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import DownloadIcon from '@mui/icons-material/Download';
 import CloseIcon from '@mui/icons-material/Close';
 import { RootState } from '../store/store';
-import { ClassificationLevel } from '../types/agreements';
+import { ClassificationLevel } from '../types/types';
 
 const DocumentPreview: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   // This line is causing the TypeScript error - fixing the state access
