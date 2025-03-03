@@ -1,11 +1,13 @@
 // src/components/wizard/BasicInformationStep.tsx
 import React, { useState } from 'react';
-import { Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Grid, LinearProgress } from '@mui/material';
+import { Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Grid, LinearProgress, SelectChangeEvent } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAgreementTitle, updateClassification } from '../../store/slices/agreementSlice';
 import { ClassificationLevel } from '../../types/types'; // Import ClassificationLevel
 import { RootState } from '../../store/store';
 import WizardNavigation from './WizardNavigation';
+import { setCurrentStep } from '../../store/slices/wizardSlice';
+//...
 
 const BasicInformationStep: React.FC = () => {
     const dispatch = useDispatch();
@@ -19,15 +21,16 @@ const BasicInformationStep: React.FC = () => {
         setLocalAgreementTitle(event.target.value);
     };
 
-    const handleClassificationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const level = event.target.value as ClassificationLevel;
-        setLocalClassificationLevel(level);
+    const handleClassificationChange = (event: SelectChangeEvent<ClassificationLevel>) => {
+      const level = event.target.value as ClassificationLevel; // Cast the string to ClassificationLevel
+      setLocalClassificationLevel(level);
     };
 
     const handleNext = () => {
         // Dispatch actions to update the Redux store
         dispatch(updateAgreementTitle(localAgreementTitle));
         dispatch(updateClassification(localClassificationLevel));
+        dispatch(setCurrentStep(3));
     };
 
     return (
@@ -65,7 +68,7 @@ const BasicInformationStep: React.FC = () => {
                   id="classification-level-select"
                   value={localClassificationLevel}
                   label="Classification Level"
-                  onChange={handleClassificationChange}
+                  onChange={handleClassificationChange} //No more error on this line
                 >
                   <MenuItem value={ClassificationLevel.UNCLASSIFIED}>Unclassified</MenuItem>
                   <MenuItem value={ClassificationLevel.CONFIDENTIAL}>Confidential</MenuItem>
