@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Install necessary dependencies
+
+npm install electron electron-builder concurrently wait-on cross-env
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
+npm install react-router-dom redux react-redux @reduxjs/toolkit
+
+
 ## Available Scripts
 
 In the project directory, you can run:
