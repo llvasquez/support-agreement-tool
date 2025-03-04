@@ -16,8 +16,8 @@ const Layout: React.FC<LayoutProps> = ({
     { id: 1, label: 'Agreement Type' },
     { id: 2, label: 'Basic Information' },
     { id: 3, label: 'Agreement Details' },
-    { id: 4, label: 'Classification' },
-    { id: 5, label: 'Review & Export' },
+    { id: 4, label: 'Review and Export' },
+    { id: 5, label: 'TBD' },
   ] 
 }) => {
   return (
