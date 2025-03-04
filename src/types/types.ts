@@ -11,7 +11,22 @@
     SECRET = 'SECRET',
     TOP_SECRET = 'TOP_SECRET'
   }
-  
+
+  export const getClassificationLabel = (level: ClassificationLevel): string => {
+  switch (level) {
+    case ClassificationLevel.UNCLASSIFIED:
+      return "Unclassified";
+    case ClassificationLevel.CONFIDENTIAL:
+      return "Confidential";
+    case ClassificationLevel.SECRET:
+      return "Secret";
+    case ClassificationLevel.TOP_SECRET:
+      return "Top Secret";
+    default:
+      return "Unknown";
+  }
+};
+
   export interface Agreement {
     id: string;
     title: string;

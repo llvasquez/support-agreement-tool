@@ -23,6 +23,7 @@ import {
     addSection,
     removeSection,
 } from '../../store/slices/agreementSlice';
+import { setCurrentStep } from '../../store/slices/wizardSlice'; // Import setCurrentStep
 import { ClassificationLevel, Section } from '../../types/types';
 import { RootState } from '../../store/store';
 import WizardNavigation from './WizardNavigation';
@@ -189,7 +190,9 @@ const AgreementDetailsStep: React.FC = () => {
             </Box>
 
             <Box sx={{ flexGrow: 1 }} />
-            <WizardNavigation />
+            <WizardNavigation 
+                 onNext={() => dispatch(setCurrentStep(4))} // Dispatch to step 4 (ReviewExportStep)
+            />
         </Box>
     );
 };

@@ -6,6 +6,7 @@ import { createAgreement } from '../store/slices/agreementSlice';
 import AgreementTypeStep from '../components/wizard/AgreementTypeStep';
 import BasicInformationStep from '../components/wizard/BasicInformationStep';
 import AgreementDetailsStep from '../components/wizard/AgreementDetailsStep';
+import ReviewExportStep from '../components/wizard/ReviewExportStep';
 import { AgreementType, ClassificationLevel } from '../types/types';
 
 const Wizard: React.FC = () => {
@@ -30,6 +31,7 @@ const Wizard: React.FC = () => {
       {currentStep === 1 && <AgreementTypeStep />}
       {currentStep === 2 && <BasicInformationStep />}
       {currentStep === 3 && <AgreementDetailsStep />} 
+      {currentStep === 4 && <ReviewExportStep />} {/* Render the new step */}
       {currentStep > 4 && <div>This step doesn't exist yet.</div>}
     </div>
   );
