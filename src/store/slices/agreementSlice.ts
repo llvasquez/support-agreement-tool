@@ -23,14 +23,43 @@ const agreementSlice = createSlice({
   name: 'agreement',
   initialState,
   reducers: {
+    setFirstParty: (state, action: PayloadAction<string>) => {
+      if (state.currentAgreement) {
+        state.currentAgreement.firstParty = action.payload;
+      }
+    },
+    setFirstPartyAcronym: (state, action: PayloadAction<string>) => {
+        if (state.currentAgreement) {
+        state.currentAgreement.firstPartyAcronym = action.payload;
+      }
+    },
+    setSecondParty: (state, action: PayloadAction<string>) => {
+        if (state.currentAgreement) {
+        state.currentAgreement.secondParty = action.payload;
+      }
+    },
+    setSecondPartyAcronym: (state, action: PayloadAction<string>) => {
+        if (state.currentAgreement) {
+        state.currentAgreement.secondPartyAcronym = action.payload;
+      }
+    },
+    setSubject: (state, action: PayloadAction<string>) => {
+      if (state.currentAgreement) {
+        state.currentAgreement.subject = action.payload;
+      }
+    },
+    setAgreementNumber: (state, action: PayloadAction<string>) => {
+        if (state.currentAgreement) {
+        state.currentAgreement.agreementNumber = action.payload;
+      }
+    },
     // Create a new agreement from a template
     createAgreement: (state, action: PayloadAction<{
       type: AgreementType;
-      title: string;
       classificationLevel: ClassificationLevel;
       author: string;
     }>) => {
-      const { type, title, classificationLevel, author } = action.payload;
+      const { type, classificationLevel, author } = action.payload;
       const template = getTemplateByType(type);
 
       const now = new Date().toISOString();
@@ -39,7 +68,7 @@ const agreementSlice = createSlice({
         state.currentAgreement = {
           id: uuidv4(),
           type,
-          title,
+          title: `${type}`,
           sections: template.sections.map((section, index) => {
             return {
               ...section,
@@ -60,6 +89,12 @@ const agreementSlice = createSlice({
           createdBy: author,
           lastModifiedBy: author,
           status: 'draft',
+          firstParty: '',  //Initialize
+          firstPartyAcronym: '', //Initialize
+          secondParty: '', //Initialize
+          secondPartyAcronym: '', //Initialize
+          subject: '', //Initialize
+          agreementNumber: '', //Initialize
         };
       }
     },
@@ -179,7 +214,12 @@ export const {
   loadAgreement,
   updateClassification,
   clearCurrentAgreement,
-  updateAgreementTitle,
+  setFirstParty,
+  setFirstPartyAcronym,
+  setSecondParty,
+  setSecondPartyAcronym,
+  setSubject,
+  setAgreementNumber
 } = agreementSlice.actions;
 
 export default agreementSlice.reducer;

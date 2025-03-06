@@ -2,8 +2,9 @@
 import { AgreementType, Template } from '../types/types'; // Import Template
 
 export const MOA_TEMPLATE: Template = {
+  
   type: AgreementType.MOA,
-  title: 'Memorandum of Agreement',
+  title: 'MEMORANDUM OF AGREEMENT',
   description: 'A binding agreement establishing a reimbursable or non-reimbursable support relationship.',
   version: '1.0.0',
   lastUpdated: new Date('2025-02-01'),
@@ -172,7 +173,7 @@ ________________________           ____________
 
 export const MOU_TEMPLATE: Template = {
   type: AgreementType.MOU,
-  title: 'Memorandum of Understanding',
+  title: 'MEMORANDUM OF AGREEMENT',
   description: 'A non-binding agreement documenting mutual understanding and planned actions.',
   version: '1.0.0',
   lastUpdated: new Date('2025-02-01'),

@@ -1,6 +1,6 @@
   export enum AgreementType {
-    MOA = 'MOA',
-    MOU = 'MOU',
+    MOA = 'MEMORANDUM OF AGREEMENT',
+    MOU = 'MEMORANDUM OF UNDERSTANDING',
     OTHER = 'OTHER',
     UNKNOWN = 'UNKNOWN'
   }
@@ -39,6 +39,12 @@
     classificationLevel: ClassificationLevel;
     currentVersionId: string;
     sections: Section[];
+    firstParty?: string;
+    firstPartyAcronym?: string;
+    secondParty?: string;
+    secondPartyAcronym?: string;
+    subject?: string;
+    agreementNumber?: string;
   }
   
   export interface Section {

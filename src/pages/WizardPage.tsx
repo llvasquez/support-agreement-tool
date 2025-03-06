@@ -19,7 +19,6 @@ const Wizard: React.FC = () => {
     if (agreementType !== AgreementType.UNKNOWN) { // Compare the value, not the enum itself
       dispatch(createAgreement({
         type: agreementType, // Use the value from Redux, not the enum
-        title: 'Test Agreement',
         classificationLevel: ClassificationLevel.UNCLASSIFIED,
         author: 'Test Author'
       }));
