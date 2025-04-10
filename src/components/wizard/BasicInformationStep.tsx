@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  TextField, 
-  FormControl, 
-  InputLabel, 
-  Select, 
-  MenuItem, 
-  Grid, 
-  LinearProgress, 
-  SelectChangeEvent 
+import {
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Grid,
+  LinearProgress,
+  SelectChangeEvent
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import {  
+import {
   setFirstParty,
   setFirstPartyAcronym,
   setSecondParty,
@@ -28,19 +28,19 @@ import { setCurrentStep } from '../../store/slices/wizardSlice';
 
 const BasicInformationStep: React.FC = () => {
   const dispatch = useDispatch();
-  
+
   // Selectors
-  const classificationLevel = useSelector((state: RootState) => state.agreement.currentAgreement?.classificationLevel || ClassificationLevel.UNCLASSIFIED);
+  const currentAgreement = useSelector((state: RootState) => state.agreement.currentAgreement);
+  const classificationLevel = currentAgreement?.classificationLevel || ClassificationLevel.UNCLASSIFIED;
 
-  // Local state
-
+  // Local state - initialize with values from current agreement if available
   const [localClassificationLevel, setLocalClassificationLevel] = useState<ClassificationLevel>(classificationLevel);
-  const [localFirstParty, setLocalFirstParty] = useState('');
-  const [localFirstPartyAcronym, setLocalFirstPartyAcronym] = useState('');
-  const [localSecondParty, setLocalSecondParty] = useState('');
-  const [localSecondPartyAcronym, setLocalSecondPartyAcronym] = useState('');
-  const [localSubject, setLocalSubject] = useState('');
-  const [localAgreementNumber, setLocalAgreementNumber] = useState('');
+  const [localFirstParty, setLocalFirstParty] = useState(currentAgreement?.firstParty || '');
+  const [localFirstPartyAcronym, setLocalFirstPartyAcronym] = useState(currentAgreement?.firstPartyAcronym || '');
+  const [localSecondParty, setLocalSecondParty] = useState(currentAgreement?.secondParty || '');
+  const [localSecondPartyAcronym, setLocalSecondPartyAcronym] = useState(currentAgreement?.secondPartyAcronym || '');
+  const [localSubject, setLocalSubject] = useState(currentAgreement?.subject || '');
+  const [localAgreementNumber, setLocalAgreementNumber] = useState(currentAgreement?.agreementNumber || '');
 
   // Change handlers
   const handleFirstPartyChange = (event: React.ChangeEvent<HTMLInputElement>) => {

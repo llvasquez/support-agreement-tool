@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Divider, List, ListItem, LinearProgress, Button } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
 import { ClassificationLevel, Section, Agreement, getClassificationLabel, AgreementType } from '../../types/types';
-import WizardNavigation from './WizardNavigation';
+
 import { jsPDF } from 'jspdf';
 import * as docx from 'docx';
 import { MOA_TEMPLATE, getTemplateByType } from '../../data/agreementTemplates';
+import { resetWizard, setCurrentStep } from '../../store/slices/wizardSlice';
+import { clearCurrentAgreement, saveAgreement } from '../../store/slices/agreementSlice';
+import HomeIcon from '@mui/icons-material/Home';
+import Notification from '../common/Notification';
 
 const ReviewExportStep: React.FC = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const currentAgreement = useSelector((state: RootState) => state.agreement.currentAgreement);
+
+    // State for notification
+    const [notification, setNotification] = useState({
+        open: false,
+        message: '',
+        severity: 'success' as 'success' | 'info' | 'warning' | 'error'
+    });
 
     // Helper function to determine the overall classification level
     const getOverallClassification = (agreement: Agreement | null): ClassificationLevel => {
@@ -151,7 +165,7 @@ const ReviewExportStep: React.FC = () => {
             children: [new TextRun({ text: currentAgreement.agreementNumber, size: 28 })],
             alignment: AlignmentType.CENTER,
         }));
-          
+
           // Add all sections
           currentAgreement.sections
             .forEach((section) => {
@@ -267,17 +281,79 @@ const ReviewExportStep: React.FC = () => {
                 <Typography>No agreement details found.</Typography>
             )}
 
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleExportPDF}>
                     Export to PDF
                 </Button>
-                <Button sx={{ ml: 2 }} variant="contained" color="primary" onClick={handleExportDOCX}>
+                <Button variant="contained" color="primary" onClick={handleExportDOCX}>
                     Export to DOCX
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        dispatch(saveAgreement());
+                        setNotification({
+                            open: true,
+                            message: 'Agreement saved successfully!',
+                            severity: 'success'
+                        });
+                    }}
+                >
+                    Save Agreement
                 </Button>
             </Box>
 
             <Box sx={{ flexGrow: 1 }} />
-            <WizardNavigation />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<HomeIcon />}
+                    onClick={() => {
+                        // Reset the wizard state
+                        dispatch(resetWizard());
+                        // Clear the current agreement
+                        dispatch(clearCurrentAgreement());
+                        // Navigate back to the dashboard
+                        navigate('/dashboard');
+                    }}
+                >
+                    Return to Start
+                </Button>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => {
+                            // Reset the wizard state
+                            dispatch(resetWizard());
+                            // Clear the current agreement
+                            dispatch(clearCurrentAgreement());
+                            // Navigate back to the dashboard
+                            navigate('/dashboard');
+                        }}
+                        sx={{ borderColor: '#dddddd', color: '#555555' }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => dispatch(setCurrentStep(3))}
+                    >
+                        Back
+                    </Button>
+                </Box>
+            </Box>
+
+            {/* Notification */}
+            <Notification
+                open={notification.open}
+                message={notification.message}
+                severity={notification.severity}
+                onClose={() => setNotification({ ...notification, open: false })}
+            />
         </Box>
     );
 };

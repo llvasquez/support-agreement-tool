@@ -14,24 +14,26 @@ const Wizard: React.FC = () => {
   const currentStep = useSelector((state: RootState) => state.wizard.currentStep);
   const agreementType = useSelector((state: RootState) => state.wizard.agreementType); // Correctly get agreementType
 
-  //This is a test agreement that will be loaded in.
+  // Get the current agreement from the store
+  const currentAgreement = useSelector((state: RootState) => state.agreement.currentAgreement);
+
+  // Only create a new agreement if one doesn't already exist and the agreement type is known
   useEffect(() => {
-    if (agreementType !== AgreementType.UNKNOWN) { // Compare the value, not the enum itself
+    if (agreementType !== AgreementType.UNKNOWN && !currentAgreement) {
       dispatch(createAgreement({
-        type: agreementType, // Use the value from Redux, not the enum
+        type: agreementType,
         classificationLevel: ClassificationLevel.UNCLASSIFIED,
         author: 'Test Author'
       }));
     }
-  }, [agreementType, dispatch]);
+  }, [agreementType, dispatch, currentAgreement]);
 
   return (
     <div>
       {currentStep === 1 && <AgreementTypeStep />}
       {currentStep === 2 && <BasicInformationStep />}
-      {currentStep === 3 && <AgreementDetailsStep />} 
-      {currentStep === 4 && <ReviewExportStep />} {/* Render the new step */}
-      {currentStep > 4 && <div>This step doesn't exist yet.</div>}
+      {currentStep === 3 && <AgreementDetailsStep />}
+      {currentStep === 4 && <ReviewExportStep />}
     </div>
   );
 };

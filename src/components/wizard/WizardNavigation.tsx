@@ -1,7 +1,9 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentStep } from '../../store/slices/wizardSlice';
+import { setCurrentStep, resetWizard } from '../../store/slices/wizardSlice';
+import { clearCurrentAgreement } from '../../store/slices/agreementSlice';
+import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
 
 interface WizardNavigationProps {
@@ -22,6 +24,7 @@ const WizardNavigation: React.FC<WizardNavigationProps> = ({
   nextLabel = 'Continue'
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const currentStep = useSelector((state: RootState) => state.wizard.currentStep);
   const handleNext = () => {
     if (onNext) {
@@ -39,17 +42,27 @@ const WizardNavigation: React.FC<WizardNavigationProps> = ({
     }
   };
 
+  // Function to handle returning to the dashboard
+  const handleReturnToDashboard = () => {
+    // Reset the wizard state
+    dispatch(resetWizard());
+    // Clear the current agreement
+    dispatch(clearCurrentAgreement());
+    // Navigate back to the dashboard
+    navigate('/dashboard');
+  };
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
       <Button
         variant="outlined"
         color="inherit"
-        onClick={onCancel || (() => {})}
+        onClick={onCancel || handleReturnToDashboard}
         sx={{ borderColor: '#dddddd', color: '#555555' }}
       >
         Cancel
       </Button>
-      
+
       {currentStep > 1 && (
         <Button
           variant="outlined"
@@ -60,7 +73,7 @@ const WizardNavigation: React.FC<WizardNavigationProps> = ({
           Back
         </Button>
       )}
-      
+
       <Button
         variant="contained"
         color="secondary"

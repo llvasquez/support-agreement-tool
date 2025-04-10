@@ -48,7 +48,7 @@ const wizardSlice = createSlice({
         documentingUnderstanding,
         partiesAllDoD
       } = state.determiningFactors;
-      
+
       if (!partiesAllDoD){
         state.agreementType = AgreementType.OTHER;
       } else if (involvesResources || involvesReimbursement || involvesFunding) {
@@ -59,10 +59,18 @@ const wizardSlice = createSlice({
         state.agreementType = AgreementType.UNKNOWN;
       }
     },
+    resetWizard: (state) => {
+      // Reset the wizard state to initial values
+      state.currentStep = initialState.currentStep;
+      state.agreementType = initialState.agreementType;
+      state.determiningFactors = {
+        ...initialState.determiningFactors
+      };
+    },
   },
 });
 
-export const { setCurrentStep, setDeterminingFactor, determineAgreementType } =
+export const { setCurrentStep, setDeterminingFactor, determineAgreementType, resetWizard } =
   wizardSlice.actions;
 
 export default wizardSlice.reducer;
