@@ -4,7 +4,7 @@
     OTHER = 'OTHER',
     UNKNOWN = 'UNKNOWN'
   }
-  
+
   export enum ClassificationLevel {
     UNCLASSIFIED = 'UNCLASSIFIED',
     CONFIDENTIAL = 'CUI',
@@ -27,26 +27,41 @@
   }
 };
 
-  export interface Agreement {
-    id: string;
-    title: string;
-    type: AgreementType;
-    status: 'draft' | 'review' | 'final';
-    createdBy: string;
-    createdDate: string;
-    lastModifiedBy: string;
-    lastModifiedDate: string;
-    classificationLevel: ClassificationLevel;
-    currentVersionId: string;
-    sections: Section[];
-    firstParty?: string;
-    firstPartyAcronym?: string;
-    secondParty?: string;
-    secondPartyAcronym?: string;
-    subject?: string;
-    agreementNumber?: string;
-  }
-  
+export interface PointOfContact {
+  name: string;
+  position: string;
+  office: string;
+  phone: string;
+  email: string;
+}
+
+export interface Agreement {
+  id: string;
+  title: string;
+  displayName?: string; // Name to display in the Recent Agreements list
+  type: AgreementType;
+  status: 'draft' | 'review' | 'final';
+  createdBy: string;
+  createdDate: string;
+  lastModifiedBy: string;
+  lastModifiedDate: string;
+  classificationLevel: ClassificationLevel;
+  currentVersionId: string;
+  sections: Section[];
+  firstParty?: string;
+  firstPartyAcronym?: string;
+  firstPartyAddress?: string; // Mailing address for first party
+  secondParty?: string;
+  secondPartyAcronym?: string;
+  secondPartyAddress?: string; // Mailing address for second party
+  subject?: string;
+  agreementNumber?: string;
+  firstPartyPOC?: PointOfContact;
+  secondPartyPOC?: PointOfContact;
+  firstPartyAlternatePOC?: PointOfContact;
+  secondPartyAlternatePOC?: PointOfContact;
+}
+
   export interface Section {
     id: string;
     agreementId: string;
@@ -59,7 +74,7 @@
     lastModifiedBy: string;
     lastModifiedDate: string;
   }
-  
+
   export interface WizardState {
     currentStep: number;
     agreementType: AgreementType;

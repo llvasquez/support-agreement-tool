@@ -60,7 +60,7 @@ b. [Second Party] Responsibilities:
     {
       id: 'Points of Contact',
       name: 'Points of Contact (POCs)',
-      content: `The following POCs will be used by the Parites to communicate matters concerning this MOA. Each party may chnage itsPOC upon reasonable notice to the other party.
+      content: `The following POCs will be used by the Parites to communicate matters concerning this MOA. Each party may change its POC upon reasonable notice to the other party.
 a. For the [First Party] 
   1. [Name, position, office identification, phone number and email of primary POC]
   2. [Name, position, office identification, phone number and email of alternate POC]

@@ -1,5 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Typography, Divider, List, ListItem, LinearProgress, Button } from '@mui/material';
+import {
+    Box,
+    Typography,
+    Divider,
+    List,
+    ListItem,
+    LinearProgress,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField
+} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
@@ -9,7 +23,7 @@ import { jsPDF } from 'jspdf';
 import * as docx from 'docx';
 import { MOA_TEMPLATE, getTemplateByType } from '../../data/agreementTemplates';
 import { resetWizard, setCurrentStep } from '../../store/slices/wizardSlice';
-import { clearCurrentAgreement, saveAgreement } from '../../store/slices/agreementSlice';
+import { clearCurrentAgreement, saveAgreement, setDisplayName } from '../../store/slices/agreementSlice';
 import HomeIcon from '@mui/icons-material/Home';
 import Notification from '../common/Notification';
 
@@ -24,6 +38,14 @@ const ReviewExportStep: React.FC = () => {
         message: '',
         severity: 'success' as 'success' | 'info' | 'warning' | 'error'
     });
+
+    // State for save dialog
+    const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+    const [agreementDisplayName, setAgreementDisplayName] = useState(
+        currentAgreement?.displayName ||
+        currentAgreement?.title ||
+        `${currentAgreement?.type || 'Agreement'} - ${new Date().toLocaleDateString()}`
+    );
 
     // Helper function to determine the overall classification level
     const getOverallClassification = (agreement: Agreement | null): ClassificationLevel => {
@@ -291,17 +313,52 @@ const ReviewExportStep: React.FC = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                        dispatch(saveAgreement());
-                        setNotification({
-                            open: true,
-                            message: 'Agreement saved successfully!',
-                            severity: 'success'
-                        });
-                    }}
+                    onClick={() => setSaveDialogOpen(true)}
                 >
                     Save Agreement
                 </Button>
+
+                {/* Save Dialog */}
+                <Dialog open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)}>
+                    <DialogTitle>Save Agreement</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Enter a name for this agreement. This name will be displayed in the Recent Agreements list.
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Agreement Name"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={agreementDisplayName}
+                            onChange={(e) => setAgreementDisplayName(e.target.value)}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
+                        <Button
+                            onClick={() => {
+                                // Set the display name
+                                dispatch(setDisplayName(agreementDisplayName));
+                                // Save the agreement
+                                dispatch(saveAgreement());
+                                // Close the dialog
+                                setSaveDialogOpen(false);
+                                // Show notification
+                                setNotification({
+                                    open: true,
+                                    message: 'Agreement saved successfully!',
+                                    severity: 'success'
+                                });
+                            }}
+                        >
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
 
             <Box sx={{ flexGrow: 1 }} />

@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
                   <ListItemText
                     primary={
                       <Typography variant="h6" component="div">
-                        {agreement.title}
+                        {agreement.displayName || agreement.title}
                       </Typography>
                     }
                     secondary={
