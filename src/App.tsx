@@ -7,6 +7,7 @@ import theme from './theme';
 import { store } from './store/store';
 import Dashboard from './pages/Dashboard';
 import WizardPage from './pages/WizardPage';
+import WorkflowTestPage from './pages/WorkflowTestPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/wizard" element={<WizardPage />} />
+            <Route path="/workflow-test" element={<WorkflowTestPage />} />
             <Route path="/" element={<Navigate replace to="/dashboard" />} />
           </Routes>
         </Router>

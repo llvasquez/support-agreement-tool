@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
             Quick Start
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <Card>
                 <CardContent>
                   <Typography variant="h2" color="primary.main" gutterBottom>
@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <Card>
                 <CardContent>
                   <Typography variant="h2" color="primary.main" gutterBottom>
@@ -62,6 +62,21 @@ const Dashboard: React.FC = () => {
                   </Typography>
                   <Button variant="outlined" color="primary" onClick={() => navigate('/wizard')}>
                     Start New MOU
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h2" color="primary.main" gutterBottom>
+                    Workflow Test
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    Test the workflow engine for routing, approvals, and notifications.
+                  </Typography>
+                  <Button variant="outlined" color="primary" onClick={() => navigate('/workflow-test')}>
+                    Open Workflow Test
                   </Button>
                 </CardContent>
               </Card>
